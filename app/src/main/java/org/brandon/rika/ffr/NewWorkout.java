@@ -11,6 +11,8 @@ import android.widget.ArrayAdapter;
 import android.widget.ListAdapter;
 import android.widget.ListView;
 
+import java.util.ArrayList;
+
 
 public class NewWorkout extends ActionBarActivity {
 
@@ -23,7 +25,8 @@ public class NewWorkout extends ActionBarActivity {
 
         api = new DataAPI(this);
 
-        String[] string_body = api.getBodyParts(this).toArray(new String[api.getBodyParts(this).size()]);
+        ArrayList<String> results = api.getBodyParts(this);
+        String[] string_body = results.toArray(new String[results.size()]);
         ListAdapter list_bodypart = new ArrayAdapter<String>(this, android.R.layout.simple_list_item_1, string_body);
         ListView v_body = (ListView) findViewById(R.id.new_list_bodypart);
         v_body.setAdapter(list_bodypart);

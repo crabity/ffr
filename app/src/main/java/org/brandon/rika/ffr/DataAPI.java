@@ -26,7 +26,10 @@ public class DataAPI {
         ArrayList<String> list = new ArrayList<String>();
         int bpNum1 = dbh.getBodyPart(db);
         list.add(dbh.getBodyPartName(db, bpNum1));
-        //list.add("Legs");
+        int bpNum2 = dbh.getBodyPart(db);
+        if (bpNum1 != bpNum2) {
+            list.add(dbh.getBodyPartName(db, bpNum2));
+        }
         return list;
     }
 
