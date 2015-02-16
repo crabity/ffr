@@ -24,7 +24,7 @@ public class DatabaseHandler extends SQLiteOpenHelper {
 
     // All Static variables
     // Database Version
-    private static final int DATABASE_VERSION = 1;
+    private static final int DATABASE_VERSION = 4;
 
     // Database Name
     static final String DATABASE_NAME = "FitFitRevolution";
@@ -134,9 +134,9 @@ public class DatabaseHandler extends SQLiteOpenHelper {
     public void onUpgrade(SQLiteDatabase db, int oldVersion, int newVersion) {
         // Drop older table if existed
         db.execSQL("DROP TABLE IF EXISTS "+TABLE_MOVES);
-        //db.execSQL("DROP TABLE IF EXISTS "+TABLE_MOVE_HISTORY);
+        db.execSQL("DROP TABLE IF EXISTS "+TABLE_MOVE_HISTORY);
         db.execSQL("DROP TABLE IF EXISTS "+TABLE_BODY_PART);
-        //db.execSQL("DROP TABLE IF EXISTS "+TABLE_WORKOUT);
+        db.execSQL("DROP TABLE IF EXISTS "+TABLE_WORKOUT);
         db.execSQL("DROP TABLE IF EXISTS "+TABLE_EQUIPMENT);
         // Create tables again
         onCreate(db);
@@ -227,8 +227,10 @@ public class DatabaseHandler extends SQLiteOpenHelper {
         ArrayList<Integer> list = new ArrayList<Integer>();
         Cursor cursor = db.rawQuery("SELECT * FROM " + TABLE_BODY_PART, null);
         if (cursor.moveToFirst()) {
+            int j = 0;
             do {
                 for (int i = 0; i < cursor.getInt(2); i++) {
+                    j=cursor.getInt(2);
                     list.add(cursor.getInt(0));
                 }
                 db.execSQL("UPDATE " + TABLE_BODY_PART + " SET " + BP_PRIORITY + " = " + (cursor.getInt(2) + 1) + " WHERE " + BP_ID + " = " + cursor.getInt(0));
@@ -236,7 +238,7 @@ public class DatabaseHandler extends SQLiteOpenHelper {
         }
         Random random = new Random();
         int placement = random.nextInt(list.size());
-        db.execSQL("UPDATE " + TABLE_BODY_PART + " SET " + BP_PRIORITY + " = 0 WHERE " + BP_ID + " = " + list.get(placement));
+        db.execSQL("UPDATE " + TABLE_BODY_PART + " SET " + BP_PRIORITY + " = 1 WHERE " + BP_ID + " = " + list.get(placement));
         return list.get(placement);
     }
 
@@ -255,7 +257,7 @@ public class DatabaseHandler extends SQLiteOpenHelper {
                 for (int i = 0; i < cursor.getInt(2); i++) {
                     list.add(cursor.getInt(0));
                 }
-                db.execSQL("UPDATE " + TABLE_MOVES + " SET " + MOVES_PRIORITY + " = " + (cursor.getInt(2) + 1) + " WHERE " + MOVES_ID + " = " + cursor.getInt(0));
+                db.execSQL("UPDATE " + TABLE_MOVES + " SET " + MOVES_PRIORITY + " = " + (cursor.getInt(2) + 2) + " WHERE " + MOVES_ID + " = " + cursor.getInt(0));
             } while (cursor.moveToNext());
         }
         Random random = new Random();
