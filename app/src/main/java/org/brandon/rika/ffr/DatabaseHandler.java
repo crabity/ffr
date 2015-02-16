@@ -86,7 +86,7 @@ public class DatabaseHandler extends SQLiteOpenHelper {
     @Override
     public void onCreate(SQLiteDatabase db) {
         // Create Moves Table
-        db.execSQL("CREATE TABLE " + TABLE_MOVES + "("
+        db.execSQL("CREATE TABLE IF NOT EXISTS " + TABLE_MOVES + "("
                 + MOVES_ID + " INTEGER PRIMARY KEY,"
                 + MOVES_NAME + " TEXT,"
                 + MOVES_DESCRIPTION + " TEXT,"
@@ -98,7 +98,7 @@ public class DatabaseHandler extends SQLiteOpenHelper {
                 + "FOREIGN KEY(" + MOVES_EQUIPMENT_ID + ") REFERENCES " + TABLE_EQUIPMENT + "(" + EQUIPMENT_ID + "))");
 
         // Create Move_History Table
-        db.execSQL("CREATE TABLE " + TABLE_MOVE_HISTORY + "("
+        db.execSQL("CREATE TABLE IF NOT EXISTS " + TABLE_MOVE_HISTORY + "("
                 + MH_MOVE_ID + " INTEGER,"
                 + MH_WORKOUT_ID + " INTEGER,"
                 + MH_WEIGHT + " INTEGER,"
@@ -108,19 +108,19 @@ public class DatabaseHandler extends SQLiteOpenHelper {
                 + "FOREIGN KEY(" + MH_WORKOUT_ID + ") REFERENCES " + TABLE_WORKOUT + "(" + WORKOUT_ID + "))");
 
         // Create Body_Part Table
-        db.execSQL("CREATE TABLE " + TABLE_BODY_PART + "("
+        db.execSQL("CREATE TABLE IF NOT EXISTS " + TABLE_BODY_PART + "("
                 + BP_ID + " INTEGER PRIMARY KEY,"
                 + BP_NAME + " TEXT,"
                 + BP_PRIORITY + " INTEGER)");
 
         // Create Workout Table
-        db.execSQL("CREATE TABLE " + TABLE_WORKOUT + "("
+        db.execSQL("CREATE TABLE IF NOT EXISTS " + TABLE_WORKOUT + "("
                 + WORKOUT_ID + " INTEGER PRIMARY KEY,"
                 + WORKOUT_DATETIME + " INTEGER,"
                 + WORKOUT_SCORE + " INTEGER)");
 
         // Create Equipment Table
-        db.execSQL("CREATE TABLE " + TABLE_EQUIPMENT + "("
+        db.execSQL("CREATE TABLE IF NOT EXISTS " + TABLE_EQUIPMENT + "("
                 + EQUIPMENT_ID + " INTEGER PRIMARY KEY,"
                 + EQUIPMENT_NAME + " TEXT)");
 
@@ -134,9 +134,9 @@ public class DatabaseHandler extends SQLiteOpenHelper {
     public void onUpgrade(SQLiteDatabase db, int oldVersion, int newVersion) {
         // Drop older table if existed
         db.execSQL("DROP TABLE IF EXISTS "+TABLE_MOVES);
-        db.execSQL("DROP TABLE IF EXISTS "+TABLE_MOVE_HISTORY);
+        //db.execSQL("DROP TABLE IF EXISTS "+TABLE_MOVE_HISTORY);
         db.execSQL("DROP TABLE IF EXISTS "+TABLE_BODY_PART);
-        db.execSQL("DROP TABLE IF EXISTS "+TABLE_WORKOUT);
+        //db.execSQL("DROP TABLE IF EXISTS "+TABLE_WORKOUT);
         db.execSQL("DROP TABLE IF EXISTS "+TABLE_EQUIPMENT);
         // Create tables again
         onCreate(db);
@@ -227,10 +227,8 @@ public class DatabaseHandler extends SQLiteOpenHelper {
         ArrayList<Integer> list = new ArrayList<Integer>();
         Cursor cursor = db.rawQuery("SELECT * FROM " + TABLE_BODY_PART, null);
         if (cursor.moveToFirst()) {
-            int j = 0;
             do {
                 for (int i = 0; i < cursor.getInt(2); i++) {
-                    j=cursor.getInt(2);
                     list.add(cursor.getInt(0));
                 }
                 db.execSQL("UPDATE " + TABLE_BODY_PART + " SET " + BP_PRIORITY + " = " + (cursor.getInt(2) + 1) + " WHERE " + BP_ID + " = " + cursor.getInt(0));
@@ -249,9 +247,9 @@ public class DatabaseHandler extends SQLiteOpenHelper {
         } else return "Error";
     }
 
-    public Integer getMove(SQLiteDatabase db) {
+    public Integer getMove(SQLiteDatabase db, Integer partNum) {
         ArrayList<Integer> list = new ArrayList<Integer>();
-        Cursor cursor = db.rawQuery("SELECT * FROM " + TABLE_MOVES, null);
+        Cursor cursor = db.rawQuery("SELECT * FROM " + TABLE_MOVES + " WHERE " + MOVES_BODY_PART_ID + " = " + partNum, null);
         if (cursor.moveToFirst()) {
             do {
                 for (int i = 0; i < cursor.getInt(2); i++) {
