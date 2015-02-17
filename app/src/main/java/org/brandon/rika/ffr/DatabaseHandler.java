@@ -265,7 +265,9 @@ public class DatabaseHandler extends SQLiteOpenHelper {
     }
 
     public String getMoveName(SQLiteDatabase db, Integer i) {
-        return "";
-        //TODO: brandon! add code!
+        Cursor cursor = db.rawQuery("SELECT * FROM " + TABLE_MOVES + " WHERE " + MOVES_ID + "=" + i, null);
+        if (cursor.moveToFirst()) {
+            return cursor.getString(1);
+        } else return "Error";
     }
 }

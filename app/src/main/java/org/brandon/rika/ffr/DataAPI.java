@@ -23,10 +23,6 @@ public class DataAPI {
     public DataAPI(Context c) {
         dbh = DatabaseHandler.getInstance(c);
         db = dbh.getWritableDatabase();
-
-        bodyparts=new HashMap<>();
-        equipment=new HashMap<>();
-        moves=new HashMap<>();
     }
 
     /*
@@ -34,6 +30,7 @@ public class DataAPI {
      */
     ArrayList<String> getBodyParts(Context context){
         ArrayList<String> list = new ArrayList<String>();
+        bodyparts=new HashMap<>();
         int bpNum1 = dbh.getBodyPart(db);
         list.add(dbh.getBodyPartName(db, bpNum1));
         bodyparts.put(dbh.getBodyPartName(db, bpNum1), bpNum1);
@@ -47,6 +44,7 @@ public class DataAPI {
 
     private void getMoves(Context c) {
         Random random = new Random();
+        moves=new HashMap<>();
         for(int i=0;i<24;i++){
             int move_id=dbh.getMove(db, random.nextInt(bodyparts.keySet().size()));
             moves.put(dbh.getMoveName(db, move_id), move_id);
@@ -58,6 +56,7 @@ public class DataAPI {
      */
     ArrayList<String> getEquipment(Context context){
         if(moves.isEmpty()) getMoves(context);
+        equipment=new HashMap<>();
         ArrayList<String> list = new ArrayList<String>();
         list.add("Weights");
         list.add("Yoga Mat");
