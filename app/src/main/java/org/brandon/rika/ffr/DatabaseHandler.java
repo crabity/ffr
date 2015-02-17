@@ -263,4 +263,9 @@ public class DatabaseHandler extends SQLiteOpenHelper {
         db.execSQL("UPDATE " + TABLE_MOVES + " SET " + MOVES_PRIORITY + " = 0 WHERE " + MOVES_ID + " = " + list.get(placement));
         return list.get(placement);
     }
+
+    public String getMoveName(SQLiteDatabase db, Integer i) {
+        return "";
+        //TODO: brandon! add code!
+    }
 }

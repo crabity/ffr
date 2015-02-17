@@ -6,6 +6,7 @@ import android.database.sqlite.SQLiteDatabase;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.Random;
 
 /**
  * Created by Rika on 2/15/2015.
@@ -22,6 +23,10 @@ public class DataAPI {
     public DataAPI(Context c) {
         dbh = DatabaseHandler.getInstance(c);
         db = dbh.getWritableDatabase();
+
+        bodyparts=new HashMap<>();
+        equipment=new HashMap<>();
+        moves=new HashMap<>();
     }
 
     /*
@@ -41,7 +46,11 @@ public class DataAPI {
     }
 
     private void getMoves(Context c) {
-
+        Random random = new Random();
+        for(int i=0;i<24;i++){
+            int move_id=dbh.getMove(db, random.nextInt(bodyparts.keySet().size()));
+            moves.put(dbh.getMoveName(db, move_id), move_id);
+        }
     }
 
     /*
