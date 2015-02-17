@@ -17,7 +17,7 @@ public class DataAPI {
     private static DatabaseHandler dbh;
 
     private ArrayList<Integer> bodyparts;
-    private ArrayList<Integer> equipment;
+    private ArrayList<String> equipment;
     private ArrayList<Integer> moves;
 
     private static Integer MOVE_COUNT = 24;
@@ -56,12 +56,8 @@ public class DataAPI {
     /*
     Retrieve list of equipment needed
      */
-    ArrayList<String> getEquipment(Context context) {
-        if(moves.isEmpty()) getMoves(context);
-        equipment=new ArrayList<Integer>();
-        ArrayList<String> list = new ArrayList<String>();
-        list.add("Weights");
-        list.add("Yoga Mat");
-        return list;
+    ArrayList<String> getEquipment(Context c) {
+        if (moves.isEmpty()) getMoves(c);
+        return dbh.getEquipmentList(db, moves);
     }
 }

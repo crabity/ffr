@@ -35,12 +35,12 @@ public class DatabaseHandler extends SQLiteOpenHelper {
     static final String TABLE_BODY_PART = "bodypart";
     static final String TABLE_WORKOUT = "workouts";
     static final String TABLE_EQUIPMENT = "equipment";
+    static final String TABLE_MOVE_EQUIP = "moveequip";
 
     // Table Moves Fields
     private static final String MOVES_ID = "moveid";
     private static final String MOVES_NAME = "name";
     private static final String MOVES_DESCRIPTION = "description";
-    private static final String MOVES_EQUIPMENT_ID = "equipmentid";
     private static final String MOVES_BODY_PART_ID = "partid";
     private static final String MOVES_PRIORITY = "priority";
     private static final String MOVES_WEIGHT = "defaultweight";
@@ -66,6 +66,10 @@ public class DatabaseHandler extends SQLiteOpenHelper {
     private static final String EQUIPMENT_ID = "equipmentid";
     private static final String EQUIPMENT_NAME = "name";
 
+    // Table Move_Equip Fields
+    private static final String ME_MOVE_ID = "moveid";
+    private static final String ME_EQUIP_ID = "equipid";
+
     // other vars
     private static Context context;
     private static DatabaseHandler i_dbh;
@@ -90,12 +94,10 @@ public class DatabaseHandler extends SQLiteOpenHelper {
                 + MOVES_ID + " INTEGER PRIMARY KEY,"
                 + MOVES_NAME + " TEXT,"
                 + MOVES_DESCRIPTION + " TEXT,"
-                + MOVES_EQUIPMENT_ID + " TEXT,"
                 + MOVES_BODY_PART_ID + " INTEGER,"
                 + MOVES_PRIORITY + " INTEGER,"
                 + MOVES_WEIGHT + " INTEGER, "
-                + "FOREIGN KEY(" + MOVES_BODY_PART_ID + ") REFERENCES " + TABLE_BODY_PART + "(" + BP_ID + "), "
-                + "FOREIGN KEY(" + MOVES_EQUIPMENT_ID + ") REFERENCES " + TABLE_EQUIPMENT + "(" + EQUIPMENT_ID + "))");
+                + "FOREIGN KEY(" + MOVES_BODY_PART_ID + ") REFERENCES " + TABLE_BODY_PART + "(" + BP_ID + "))");
 
         // Create Move_History Table
         db.execSQL("CREATE TABLE IF NOT EXISTS " + TABLE_MOVE_HISTORY + "("
@@ -124,9 +126,17 @@ public class DatabaseHandler extends SQLiteOpenHelper {
                 + EQUIPMENT_ID + " INTEGER PRIMARY KEY,"
                 + EQUIPMENT_NAME + " TEXT)");
 
+        // Create Move_Equipment Table
+        db.execSQL("CREATE TABLE IF NOT EXISTS " + TABLE_MOVE_EQUIP + "("
+                + ME_MOVE_ID + " INTEGER,"
+                + ME_EQUIP_ID + " INTEGER, "
+                + "FOREIGN KEY(" + ME_MOVE_ID + ") REFERENCES " + TABLE_MOVES + "(" + MOVES_ID + "), "
+                + "FOREIGN KEY(" + ME_EQUIP_ID + ") REFERENCES " + TABLE_EQUIPMENT + "(" + EQUIPMENT_ID + "))");
+
         FillBodyPartsTable(db);
         FillEquipmentTable(db);
         FillMovesTable(db);
+        FillMoveEquipTable(db);
     }
 
     // Upgrading database
@@ -138,6 +148,7 @@ public class DatabaseHandler extends SQLiteOpenHelper {
         db.execSQL("DROP TABLE IF EXISTS " + TABLE_BODY_PART);
         //db.execSQL("DROP TABLE IF EXISTS "+TABLE_WORKOUT);
         db.execSQL("DROP TABLE IF EXISTS " + TABLE_EQUIPMENT);
+        db.execSQL("DROP TABLE IF EXISTS " + TABLE_MOVE_EQUIP);
         // Create tables again
         onCreate(db);
     }
@@ -193,6 +204,32 @@ public class DatabaseHandler extends SQLiteOpenHelper {
         }
     }
 
+    private void FillMoveEquipTable(SQLiteDatabase db) {
+        String line;
+        String csvDelimiter = ",";
+        BufferedReader br = null;
+        try {
+            br = new BufferedReader(new InputStreamReader(context.getResources().openRawResource(R.raw.moveequipment)));
+            while ((line = br.readLine()) != null) {
+                String[] input = line.split(csvDelimiter);
+                ContentValues values = new ContentValues();
+                values.put(ME_MOVE_ID, input[0]);
+                values.put(ME_EQUIP_ID, input[1]);
+                db.insert(TABLE_MOVE_EQUIP, null, values);
+            }
+        } catch (IOException e) {
+            e.printStackTrace();
+        } finally {
+            if (br != null) {
+                try {
+                    br.close();
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+            }
+        }
+    }
+
     private void FillMovesTable(SQLiteDatabase db) {
         String line;
         String csvDelimiter = ",";
@@ -204,10 +241,9 @@ public class DatabaseHandler extends SQLiteOpenHelper {
                 ContentValues values = new ContentValues();
                 values.put(MOVES_NAME, input[0]);
                 values.put(MOVES_DESCRIPTION, input[1]);
-                values.put(MOVES_EQUIPMENT_ID, input[2]);
-                values.put(MOVES_BODY_PART_ID, input[3]);
+                values.put(MOVES_BODY_PART_ID, input[2]);
                 values.put(MOVES_PRIORITY, 1);
-                values.put(MOVES_WEIGHT, input[4]);
+                values.put(MOVES_WEIGHT, input[3]);
                 db.insert(TABLE_MOVES, null, values);
             }
         } catch (IOException e) {
@@ -247,8 +283,23 @@ public class DatabaseHandler extends SQLiteOpenHelper {
         } else return "Error";
     }
 
-    public ArrayList<String> getEquipmentList(SQLiteDatabase db, ArrayList<Integer> parts) {
+    public ArrayList<String> getEquipmentList(SQLiteDatabase db, ArrayList<Integer> moveList) {
         ArrayList<String> names = new ArrayList<String>();
+        for (int i: moveList) {
+            Cursor cursor = db.rawQuery("SELECT " + ME_EQUIP_ID + " FROM " + TABLE_MOVE_EQUIP + " WHERE " + ME_MOVE_ID + " = " + i, null);
+            if (cursor.moveToFirst()) {
+                boolean testForMatch = false;
+                for (String test: names) {
+                    if (test.equals(getMoveName(db, cursor.getInt(0)))) {
+                        testForMatch = true;
+                    }
+                }
+                if (!testForMatch) {
+                    names.add(getMoveName(db, cursor.getInt(0)));
+                }
+            }
+            cursor.moveToNext();
+        }
         return names;
     }
 
