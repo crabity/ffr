@@ -16,9 +16,11 @@ public class DataAPI {
     private SQLiteDatabase db;
     private static DatabaseHandler dbh;
 
-    private HashMap<String, Integer> bodyparts;
-    private HashMap<String, Integer> equipment;
-    private HashMap<String, Integer> moves;
+    private ArrayList<Integer> bodyparts;
+    private ArrayList<Integer> equipment;
+    private ArrayList<Integer> moves;
+
+    private static Integer MOVE_COUNT = 24;
 
     public DataAPI(Context c) {
         dbh = DatabaseHandler.getInstance(c);
@@ -28,35 +30,35 @@ public class DataAPI {
     /*
     Retrieve list of bodyparts to exercise
      */
-    ArrayList<String> getBodyParts(Context context){
+    ArrayList<String> getBodyParts(Context context) {
         ArrayList<String> list = new ArrayList<String>();
-        bodyparts=new HashMap<>();
+        bodyparts=new ArrayList<Integer>();
         int bpNum1 = dbh.getBodyPart(db);
         list.add(dbh.getBodyPartName(db, bpNum1));
-        bodyparts.put(dbh.getBodyPartName(db, bpNum1), bpNum1);
+        bodyparts.add(bpNum1);
         int bpNum2 = dbh.getBodyPart(db);
         if (bpNum1 != bpNum2) {
             list.add(dbh.getBodyPartName(db, bpNum2));
-            bodyparts.put(dbh.getBodyPartName(db, bpNum2), bpNum2);
+            bodyparts.add(bpNum2);
         }
         return list;
     }
 
     private void getMoves(Context c) {
         Random random = new Random();
-        moves=new HashMap<>();
-        for(int i=0;i<24;i++){
-            int move_id=dbh.getMove(db, random.nextInt(bodyparts.keySet().size()));
-            moves.put(dbh.getMoveName(db, move_id), move_id);
+        moves = new ArrayList<Integer>();
+        for(int i = 0; i < MOVE_COUNT; i++) {
+            int move_id = dbh.getMove(db, random.nextInt(bodyparts.size()));
+            moves.add(move_id);
         }
     }
 
     /*
     Retrieve list of equipment needed
      */
-    ArrayList<String> getEquipment(Context context){
+    ArrayList<String> getEquipment(Context context) {
         if(moves.isEmpty()) getMoves(context);
-        equipment=new HashMap<>();
+        equipment=new ArrayList<Integer>();
         ArrayList<String> list = new ArrayList<String>();
         list.add("Weights");
         list.add("Yoga Mat");

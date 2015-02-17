@@ -75,8 +75,8 @@ public class DatabaseHandler extends SQLiteOpenHelper {
         this.context = context;
     }
 
-    public static DatabaseHandler getInstance(Context c){
-        if(i_dbh==null){
+    public static DatabaseHandler getInstance(Context c) {
+        if (i_dbh == null) {
             i_dbh = new DatabaseHandler(c.getApplicationContext());
         }
         return i_dbh;
@@ -133,11 +133,11 @@ public class DatabaseHandler extends SQLiteOpenHelper {
     @Override
     public void onUpgrade(SQLiteDatabase db, int oldVersion, int newVersion) {
         // Drop older table if existed
-        db.execSQL("DROP TABLE IF EXISTS "+TABLE_MOVES);
+        db.execSQL("DROP TABLE IF EXISTS " + TABLE_MOVES);
         //db.execSQL("DROP TABLE IF EXISTS "+TABLE_MOVE_HISTORY);
-        db.execSQL("DROP TABLE IF EXISTS "+TABLE_BODY_PART);
+        db.execSQL("DROP TABLE IF EXISTS " + TABLE_BODY_PART);
         //db.execSQL("DROP TABLE IF EXISTS "+TABLE_WORKOUT);
-        db.execSQL("DROP TABLE IF EXISTS "+TABLE_EQUIPMENT);
+        db.execSQL("DROP TABLE IF EXISTS " + TABLE_EQUIPMENT);
         // Create tables again
         onCreate(db);
     }
@@ -245,6 +245,11 @@ public class DatabaseHandler extends SQLiteOpenHelper {
         if (cursor.moveToFirst()) {
             return cursor.getString(1);
         } else return "Error";
+    }
+
+    public ArrayList<String> getEquipmentList(SQLiteDatabase db, ArrayList<Integer> parts) {
+        ArrayList<String> names = new ArrayList<String>();
+        return names;
     }
 
     public Integer getMove(SQLiteDatabase db, Integer partNum) {
