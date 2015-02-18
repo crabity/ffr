@@ -28,6 +28,10 @@
             android:name=".Workout"
             android:label="@string/title_workout" >
         </activity>
+        <activity
+            android:name=".SummaryActivity"
+            android:label="@string/title_activity_summary" >
+        </activity>
     </application>
 
 </manifest>

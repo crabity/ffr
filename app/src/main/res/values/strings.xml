@@ -4,17 +4,14 @@
     <string name="app_name">FitFitRevolution</string>
     <string name="hello_world">Hello world!</string>
     <string name="action_settings">Settings</string>
-
     <string name="main_start">START NEW WORKOUT</string>
     <string name="main_progress">SEE PROGRESS</string>
-
     <string name="title_newworkout">New Workout</string>
     <string name="new_title">New Workout</string>
     <string name="new_equipment">You will need</string>
     <string name="new_bodypart">You will workout</string>
     <string name="new_start">GO!</string>
     <string name="new_reroll">Reroll</string>
-
     <string name="title_workout">Workout Name</string>
     <string name="workout_count"># 1 of 24</string>
     <string name="workout_time">0:00/60:00</string>
@@ -24,6 +21,6 @@
     <string name="workout_inc_label">+</string>
     <string name="workout_dec_label">-</string>
     <string name="workout_next">NEXT</string>
-
+    <string name="title_summary">Congratulations!</string>
 
 </resources>
