@@ -285,8 +285,9 @@ public class DatabaseHandler extends SQLiteOpenHelper {
 
     public ArrayList<String> getEquipmentList(SQLiteDatabase db, ArrayList<Integer> moveList) {
         ArrayList<String> names = new ArrayList<String>();
+        Cursor cursor = null;
         for (int i: moveList) {
-            Cursor cursor = db.rawQuery("SELECT " + ME_EQUIP_ID + " FROM " + TABLE_MOVE_EQUIP + " WHERE " + ME_MOVE_ID + " = " + moveList.get(i), null);
+            cursor = db.rawQuery("SELECT " + ME_EQUIP_ID + " FROM " + TABLE_MOVE_EQUIP + " WHERE " + ME_MOVE_ID + " = " + moveList.get(i), null);
             if (cursor.moveToFirst()) {
                 boolean testForMatch = false;
                 for (String test: names) {
@@ -300,6 +301,7 @@ public class DatabaseHandler extends SQLiteOpenHelper {
             }
             cursor.moveToNext();
         }
+        cursor.close();
         return names;
     }
 
@@ -311,16 +313,20 @@ public class DatabaseHandler extends SQLiteOpenHelper {
     }
 
     public Integer getMove(SQLiteDatabase db, Integer partNum) {
-        ArrayList<Integer> list = new ArrayList<Integer>();
+        ArrayList<Integer> list = new ArrayList<Integer>(500);
         Cursor cursor = db.rawQuery("SELECT * FROM " + TABLE_MOVES + " WHERE " + MOVES_BODY_PART_ID + " = " + partNum, null);
         if (cursor.moveToFirst()) {
+            System.out.println("[Databasehandler.getMove()] list new");
             do {
                 for (int i = 0; i < cursor.getInt(4); i++) {
                     list.add(cursor.getInt(0));
                 }
                 db.execSQL("UPDATE " + TABLE_MOVES + " SET " + MOVES_PRIORITY + " = " + (cursor.getInt(4) + 2) + " WHERE " + MOVES_ID + " = " + cursor.getInt(0));
+                System.out.println("[Databasehandler.getMove()] list size=" + list.size());
             } while (cursor.moveToNext());
+            cursor.close();
         }
+
         Random random = new Random();
         int placement = random.nextInt(list.size());
         db.execSQL("UPDATE " + TABLE_MOVES + " SET " + MOVES_PRIORITY + " = 1 WHERE " + MOVES_ID + " = " + list.get(placement));
