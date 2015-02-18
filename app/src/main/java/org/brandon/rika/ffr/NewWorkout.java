@@ -23,7 +23,7 @@ public class NewWorkout extends ActionBarActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_new_workout);
 
-        api = new DataAPI(this);
+        api = DataAPI.getInstance(this);
 
         ArrayList<String> array_body = api.getBodyParts(this);
         String[] string_body = array_body.toArray(new String[array_body.size()]);

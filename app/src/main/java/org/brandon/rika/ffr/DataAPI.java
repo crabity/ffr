@@ -13,8 +13,10 @@ import java.util.Random;
  */
 public class DataAPI {
 
+    private static DataAPI i_dataapi;
+
     private SQLiteDatabase db;
-    private static DatabaseHandler dbh;
+    private DatabaseHandler dbh;
 
     private ArrayList<Integer> bodyparts;
     private ArrayList<Integer> moves;
@@ -27,6 +29,13 @@ public class DataAPI {
 
         bodyparts = new ArrayList<Integer>();
         moves = new ArrayList<Integer>();
+    }
+
+    public static DataAPI getInstance(Context c){
+        if(i_dataapi==null){
+            i_dataapi = new DataAPI(c.getApplicationContext());
+        }
+        return i_dataapi;
     }
 
     /*
@@ -53,6 +62,14 @@ public class DataAPI {
             int move_id = dbh.getMove(db, bodyparts.get(random.nextInt(bodyparts.size())));
             moves.add(move_id);
         }
+    }
+
+    ArrayList<String> getMoveList(){
+        ArrayList<String> move_names = new ArrayList<>();
+        for(int i=0; i<moves.size(); i++){
+            move_names.add(dbh.getMoveName(db, moves.get(i)));
+        }
+        return move_names;
     }
 
     /*

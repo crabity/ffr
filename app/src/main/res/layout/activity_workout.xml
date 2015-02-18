@@ -75,6 +75,7 @@
         android:text="25"
         android:numeric="integer"
         android:textAlignment="center"
+        android:onClick="toSummary"
         android:layout_below="@+id/textView7"
         android:layout_centerHorizontal="true" />
 

@@ -29,8 +29,8 @@
             android:label="@string/title_workout" >
         </activity>
         <activity
-            android:name=".SummaryActivity"
-            android:label="@string/title_activity_summary" >
+            android:name=".Summary"
+            android:label="@string/title_summary" >
         </activity>
     </application>
 
