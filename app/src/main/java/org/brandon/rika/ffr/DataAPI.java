@@ -17,7 +17,6 @@ public class DataAPI {
     private static DatabaseHandler dbh;
 
     private ArrayList<Integer> bodyparts;
-    private ArrayList<String> equipment;
     private ArrayList<Integer> moves;
 
     private static Integer MOVE_COUNT = 24;
@@ -25,6 +24,9 @@ public class DataAPI {
     public DataAPI(Context c) {
         dbh = DatabaseHandler.getInstance(c);
         db = dbh.getWritableDatabase();
+
+        bodyparts = new ArrayList<Integer>();
+        moves = new ArrayList<Integer>();
     }
 
     /*
@@ -44,11 +46,11 @@ public class DataAPI {
         return list;
     }
 
-    private void getMoves(Context c) {
+    void getMoves(Context c) {
         Random random = new Random();
         moves = new ArrayList<Integer>();
         for(int i = 0; i < MOVE_COUNT; i++) {
-            int move_id = dbh.getMove(db, random.nextInt(bodyparts.size()));
+            int move_id = dbh.getMove(db, bodyparts.get(random.nextInt(bodyparts.size())));
             moves.add(move_id);
         }
     }
@@ -56,8 +58,7 @@ public class DataAPI {
     /*
     Retrieve list of equipment needed
      */
-    ArrayList<String> getEquipment(Context c) {
-        if (moves.isEmpty()) getMoves(c);
+    ArrayList<String> getEquipment(Context context) {
         return dbh.getEquipmentList(db, moves);
     }
 }

@@ -31,7 +31,9 @@ public class NewWorkout extends ActionBarActivity {
         ListView v_body = (ListView) findViewById(R.id.new_list_bodypart);
         v_body.setAdapter(list_bodypart);
 
-        ArrayList<String> array_equip = api.getBodyParts(this);
+        api.getMoves(this);
+
+        ArrayList<String> array_equip = api.getEquipment(this);
         String[] string_equip = array_equip.toArray(new String[array_equip.size()]);
         ListAdapter list_equip = new ArrayAdapter<String>(this, android.R.layout.simple_list_item_1, string_equip);
         ListView v_equip = (ListView) findViewById(R.id.new_list_equipment);
