@@ -299,9 +299,8 @@ public class DatabaseHandler extends SQLiteOpenHelper {
                     names.add(getEquipmentName(db, cursor.getInt(0)));
                 }
             }
-            cursor.moveToNext();
+            cursor.close();
         }
-        cursor.close();
         return names;
     }
 
