@@ -59,7 +59,7 @@ public class DataAPI {
         Random random = new Random();
         moves = new ArrayList<Integer>();
         for(int i = 0; i < MOVE_COUNT; i++) {
-            int move_id = dbh.getMove(db, bodyparts.get(random.nextInt(bodyparts.size())));
+            int move_id = dbh.getRandomMoveID(db, bodyparts.get(random.nextInt(bodyparts.size())));
             moves.add(move_id);
         }
     }

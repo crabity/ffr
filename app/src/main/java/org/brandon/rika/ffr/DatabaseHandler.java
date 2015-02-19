@@ -311,7 +311,15 @@ public class DatabaseHandler extends SQLiteOpenHelper {
         } else return "Error";
     }
 
-    public Integer getMove(SQLiteDatabase db, Integer partNum) {
+    /*This method will return the Cursor for the move with ID moveID.  The calling method will have
+        to step through the cursor and pull the items by type.  See FillMoveTable for info on table
+        structure.
+     */
+    public Cursor getMove(SQLiteDatabase db, Integer moveID) {
+        return db.rawQuery("SELECT * FROM " + TABLE_MOVES + " WHERE " + MOVES_ID + " = " + moveID, null);
+    }
+
+    public Integer getRandomMoveID(SQLiteDatabase db, Integer partNum) {
         ArrayList<Integer> list = new ArrayList<Integer>(500);
         Cursor cursor = db.rawQuery("SELECT * FROM " + TABLE_MOVES + " WHERE " + MOVES_BODY_PART_ID + " = " + partNum, null);
         if (cursor.moveToFirst()) {
