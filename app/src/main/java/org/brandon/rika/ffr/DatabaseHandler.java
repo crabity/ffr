@@ -36,21 +36,22 @@ public class DatabaseHandler extends SQLiteOpenHelper {
     static final String TABLE_WORKOUT = "workouts";
     static final String TABLE_EQUIPMENT = "equipment";
     static final String TABLE_MOVE_EQUIP = "moveequip";
+    static final String TABLE_WEIGHTS = "weights";
 
     // Table Moves Fields
-    private static final String MOVES_ID = "moveid";
-    private static final String MOVES_NAME = "name";
-    private static final String MOVES_DESCRIPTION = "description";
-    private static final String MOVES_BODY_PART_ID = "partid";
-    private static final String MOVES_PRIORITY = "priority";
-    private static final String MOVES_WEIGHT = "defaultweight";
+    static final String MOVES_ID = "moveid";
+    static final String MOVES_NAME = "name";
+    static final String MOVES_DESCRIPTION = "description";
+    static final String MOVES_BODY_PART_ID = "partid";
+    static final String MOVES_PRIORITY = "priority";
+    static final String MOVES_WEIGHT_ID = "moveweightid";
 
     // Table Move_History Fields
-    private static final String MH_MOVE_ID = "moveid";
-    private static final String MH_WORKOUT_ID = "workoutid";
-    private static final String MH_WEIGHT = "weight";
-    private static final String MH_REPS = "reps";
-    private static final String MH_PLACEMENT = "placement";
+    static final String MH_MOVE_ID = "moveid";
+    static final String MH_WORKOUT_ID = "workoutid";
+    static final String MH_WEIGHT = "weight";
+    static final String MH_REPS = "reps";
+    static final String MH_PLACEMENT = "placement";
 
     // Table Body_Part Fields
     static final String BP_ID = "partid";
@@ -58,17 +59,21 @@ public class DatabaseHandler extends SQLiteOpenHelper {
     static final String BP_PRIORITY = "priority";
 
     // Table Workout Fields
-    private static final String WORKOUT_ID = "workoutid";
-    private static final String WORKOUT_DATETIME = "time";
-    private static final String WORKOUT_SCORE = "score";
+    static final String WORKOUT_ID = "workoutid";
+    static final String WORKOUT_DATETIME = "time";
+    static final String WORKOUT_SCORE = "score";
 
     // Table Equipment Fields
-    private static final String EQUIPMENT_ID = "equipmentid";
-    private static final String EQUIPMENT_NAME = "name";
+    static final String EQUIPMENT_ID = "equipmentid";
+    static final String EQUIPMENT_NAME = "name";
 
     // Table Move_Equip Fields
-    private static final String ME_MOVE_ID = "moveid";
-    private static final String ME_EQUIP_ID = "equipid";
+    static final String ME_MOVE_ID = "moveid";
+    static final String ME_EQUIP_ID = "equipid";
+
+    // Table Weights Fields
+    static final String WEIGHTS_ID = "weightid";
+    static final String WEIGHTS_NUM = "weightnum";
 
     // other vars
     private static Context context;
@@ -96,8 +101,9 @@ public class DatabaseHandler extends SQLiteOpenHelper {
                 + MOVES_DESCRIPTION + " TEXT,"
                 + MOVES_BODY_PART_ID + " INTEGER,"
                 + MOVES_PRIORITY + " INTEGER,"
-                + MOVES_WEIGHT + " INTEGER, "
-                + "FOREIGN KEY(" + MOVES_BODY_PART_ID + ") REFERENCES " + TABLE_BODY_PART + "(" + BP_ID + "))");
+                + MOVES_WEIGHT_ID + " INTEGER, "
+                + "FOREIGN KEY(" + MOVES_BODY_PART_ID + ") REFERENCES " + TABLE_BODY_PART + "(" + BP_ID + "), "
+                + "FOREIGN KEY(" + MOVES_WEIGHT_ID + ") REFERENCES " + TABLE_WEIGHTS + "(" + WEIGHTS_ID + "))");
 
         // Create Move_History Table
         db.execSQL("CREATE TABLE IF NOT EXISTS " + TABLE_MOVE_HISTORY + "("
@@ -133,10 +139,16 @@ public class DatabaseHandler extends SQLiteOpenHelper {
                 + "FOREIGN KEY(" + ME_MOVE_ID + ") REFERENCES " + TABLE_MOVES + "(" + MOVES_ID + "), "
                 + "FOREIGN KEY(" + ME_EQUIP_ID + ") REFERENCES " + TABLE_EQUIPMENT + "(" + EQUIPMENT_ID + "))");
 
+        // Create Weights Table
+        db.execSQL("CREATE TABLE IF NOT EXISTS " + TABLE_WEIGHTS + "("
+                + WEIGHTS_ID + " INTEGER PRIMARY KEY,"
+                + WEIGHTS_NUM + " INTEGER)");
+
         FillBodyPartsTable(db);
         FillEquipmentTable(db);
         FillMovesTable(db);
         FillMoveEquipTable(db);
+        FillWeightsTable(db);
     }
 
     // Upgrading database
@@ -243,8 +255,31 @@ public class DatabaseHandler extends SQLiteOpenHelper {
                 values.put(MOVES_DESCRIPTION, input[1]);
                 values.put(MOVES_BODY_PART_ID, input[2]);
                 values.put(MOVES_PRIORITY, 1);
-                values.put(MOVES_WEIGHT, input[3]);
+                values.put(MOVES_WEIGHT_ID, input[3]);
                 db.insert(TABLE_MOVES, null, values);
+            }
+        } catch (IOException e) {
+            e.printStackTrace();
+        } finally {
+            if (br != null) {
+                try {
+                    br.close();
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+            }
+        }
+    }
+
+    private void FillWeightsTable(SQLiteDatabase db) {
+        String line;
+        BufferedReader br = null;
+        try {
+            br = new BufferedReader(new InputStreamReader(context.getResources().openRawResource(R.raw.weights)));
+            while ((line = br.readLine()) != null) {
+                ContentValues values = new ContentValues();
+                values.put(WEIGHTS_NUM, Integer.parseInt(line));
+                db.insert(TABLE_WEIGHTS, null, values);
             }
         } catch (IOException e) {
             e.printStackTrace();
@@ -309,14 +344,6 @@ public class DatabaseHandler extends SQLiteOpenHelper {
         if (cursor.moveToFirst()) {
             return cursor.getString(1);
         } else return "Error";
-    }
-
-    /*This method will return the Cursor for the move with ID moveID.  The calling method will have
-        to step through the cursor and pull the items by type.  See FillMoveTable for info on table
-        structure.
-     */
-    public Cursor getMove(SQLiteDatabase db, Integer moveID) {
-        return db.rawQuery("SELECT * FROM " + TABLE_MOVES + " WHERE " + MOVES_ID + " = " + moveID, null);
     }
 
     public Integer getRandomMoveID(SQLiteDatabase db, Integer partNum) {
