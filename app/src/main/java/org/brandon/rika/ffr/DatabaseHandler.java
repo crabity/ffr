@@ -350,11 +350,11 @@ public class DatabaseHandler extends SQLiteOpenHelper {
         Cursor cursor = db.rawQuery("SELECT " + MH_REPS + " FROM " + TABLE_MOVE_HISTORY + " WHERE " + MOVES_ID + " = " + mID + " ORDER BY " + MH_WORKOUT_ID + " DESC", null);
         if (cursor.moveToFirst()) {
             return cursor.getInt(0);
-        } else return 1;
+        } else return 10;
     }
 
     public static Cursor getMove(SQLiteDatabase db, Integer mID) {
-        return db.rawQuery("SELECT * FROM " + DatabaseHandler.TABLE_MOVES + " WHERE " + DatabaseHandler.MOVES_ID + " = " + mID, null);
+        return db.rawQuery("SELECT * FROM " + TABLE_MOVES + " WHERE " + MOVES_ID + " = " + mID, null);
     }
 
     public String getMoveName(SQLiteDatabase db, Integer i) {
@@ -362,6 +362,13 @@ public class DatabaseHandler extends SQLiteOpenHelper {
         if (cursor.moveToFirst()) {
             return cursor.getString(1);
         } else return "Error";
+    }
+
+    public static Integer getNextWorkout(SQLiteDatabase db) {
+        Cursor cursor = db.rawQuery("SELECT * FROM " + TABLE_WORKOUT + " ORDER BY " + WORKOUT_ID + " DESC", null);
+        if (cursor.moveToFirst()) {
+            return cursor.getInt(0) + 1;
+        } else return 0;
     }
 
     public Integer getRandomMoveID(SQLiteDatabase db, Integer partNum) {
@@ -383,7 +390,7 @@ public class DatabaseHandler extends SQLiteOpenHelper {
     }
 
     public static Integer getWeightNum(SQLiteDatabase db, Integer wID) {
-        Cursor cursor = db.rawQuery("SELECT * FROM " + DatabaseHandler.TABLE_WEIGHTS + " WHERE " + DatabaseHandler.WEIGHTS_ID + "=" + wID, null);
+        Cursor cursor = db.rawQuery("SELECT * FROM " + TABLE_WEIGHTS + " WHERE " + WEIGHTS_ID + "=" + wID, null);
         if (cursor.moveToFirst()) {
             return cursor.getInt(1);
         } else return 0;
