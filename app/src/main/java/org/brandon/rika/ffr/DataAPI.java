@@ -39,9 +39,6 @@ public class DataAPI {
     }
 
     public void newWorkout(){
-        bodyparts = new ArrayList<Integer>();
-        moves = new ArrayList<Integer>();
-
         current_move_idx = 1;
     }
 

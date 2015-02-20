@@ -33,10 +33,10 @@ public class Workout extends ActionBarActivity {
         workout_desc.setText(i_move.description);
 
         EditText workout_rep = (EditText) findViewById(R.id.workout_rep);
-        workout_rep.setText(i_move.reps+"");
+        workout_rep.setText(i_move.reps + "");
 
         EditText workout_weight = (EditText) findViewById(R.id.workout_weight);
-        workout_rep.setText(i_move.weight+"");
+        workout_rep.setText(i_move.weight + "");
     }
 
 
@@ -77,6 +77,30 @@ public class Workout extends ActionBarActivity {
         }
 
         startActivity(intent);
-
     }
+
+    public void setRepsUp(View v){
+        i_move.setRepsUp();
+        EditText workout_rep = (EditText) findViewById(R.id.workout_rep);
+        workout_rep.setText(i_move.reps + "");
+    }
+
+    public void setRepsDown(View v){
+        i_move.setRepsDown();
+        EditText workout_rep = (EditText) findViewById(R.id.workout_rep);
+        workout_rep.setText(i_move.reps + "");
+    }
+
+    public void setWeightUp(View v){
+        i_move.setWeightUp();
+        EditText workout_rep = (EditText) findViewById(R.id.workout_weight);
+        workout_rep.setText(i_move.weight + "");
+    }
+
+    public void setWeightDown(View v){
+        i_move.setWeightDown();
+        EditText workout_rep = (EditText) findViewById(R.id.workout_weight);
+        workout_rep.setText(i_move.weight + "");
+    }
+
 }
