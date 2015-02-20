@@ -33,10 +33,20 @@ public class Move {
         weightID = cursor.getInt(4);
         weight = getWeightNum();
         cursor.close();
+        reps = DatabaseHandler.getLastRep(db, mID);
     }
 
     private Integer getWeightNum() {
         return DatabaseHandler.getWeightNum(database, weightID);
+    }
+
+    public void setRepsDown() {
+        if (reps > 1) {
+            reps--;
+        }
+    }
+    public void setRepsUp() {
+        reps++;
     }
 
     public void setWeightDown() {

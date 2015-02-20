@@ -340,14 +340,28 @@ public class DatabaseHandler extends SQLiteOpenHelper {
     }
 
     public String getEquipmentName(SQLiteDatabase db, Integer i) {
-        Cursor cursor = db.rawQuery("SELECT * FROM " + TABLE_EQUIPMENT + " WHERE " + EQUIPMENT_ID + "=" + i, null);
+        Cursor cursor = db.rawQuery("SELECT * FROM " + TABLE_EQUIPMENT + " WHERE " + EQUIPMENT_ID + " = " + i, null);
         if (cursor.moveToFirst()) {
             return cursor.getString(1);
         } else return "Error";
     }
 
+    public static Integer getLastRep(SQLiteDatabase db, Integer mID) {
+        Cursor cursor = db.rawQuery("SELECT " + MH_REPS + " FROM " + TABLE_MOVE_HISTORY + " WHERE " + MOVES_ID + " = " + mID + " ORDER BY " + MH_WORKOUT_ID + " DESC", null);
+        if (cursor.moveToFirst()) {
+            return cursor.getInt(0);
+        } else return 1;
+    }
+
     public static Cursor getMove(SQLiteDatabase db, Integer mID) {
         return db.rawQuery("SELECT * FROM " + DatabaseHandler.TABLE_MOVES + " WHERE " + DatabaseHandler.MOVES_ID + " = " + mID, null);
+    }
+
+    public String getMoveName(SQLiteDatabase db, Integer i) {
+        Cursor cursor = db.rawQuery("SELECT * FROM " + TABLE_MOVES + " WHERE " + MOVES_ID + "=" + i, null);
+        if (cursor.moveToFirst()) {
+            return cursor.getString(1);
+        } else return "Error";
     }
 
     public Integer getRandomMoveID(SQLiteDatabase db, Integer partNum) {
@@ -366,13 +380,6 @@ public class DatabaseHandler extends SQLiteOpenHelper {
         int placement = random.nextInt(list.size());
         db.execSQL("UPDATE " + TABLE_MOVES + " SET " + MOVES_PRIORITY + " = 1 WHERE " + MOVES_ID + " = " + list.get(placement));
         return list.get(placement);
-    }
-
-    public String getMoveName(SQLiteDatabase db, Integer i) {
-        Cursor cursor = db.rawQuery("SELECT * FROM " + TABLE_MOVES + " WHERE " + MOVES_ID + "=" + i, null);
-        if (cursor.moveToFirst()) {
-            return cursor.getString(1);
-        } else return "Error";
     }
 
     public static Integer getWeightNum(SQLiteDatabase db, Integer wID) {
