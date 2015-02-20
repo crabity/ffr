@@ -398,6 +398,6 @@ public class DatabaseHandler extends SQLiteOpenHelper {
 
     public static void insertWorkoutMove(SQLiteDatabase db, Integer mID, Integer wID, Integer reps, Integer weightID, Integer pos) {
         db.rawQuery("INSERT INTO " + TABLE_MOVE_HISTORY + " (" + MH_MOVE_ID + ", " + MH_WORKOUT_ID + ", " + MH_WEIGHT + ", " + MH_REPS + ", "+ MH_PLACEMENT
-            + " VALUES(" + mID + ", " + wID + ", " + weightID + ", "+ reps + ", " + pos + ")", null);
+            + ") VALUES(" + mID + ", " + wID + ", " + weightID + ", "+ reps + ", " + pos + ")", null);
     }
 }
