@@ -6,14 +6,24 @@ import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.EditText;
 
 
 public class Workout extends ActionBarActivity {
+
+    DataAPI api;
+    Move i_move;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_workout);
+
+        api = DataAPI.getInstance(this);
+        i_move = new Move(api.getDB(), api.getMoveID(), 0, api.getMoveIDX());
+
+        EditText workout_name = (EditText) findViewById(R.id.workout_name);
+        workout_name.setText(i_move.name);
     }
 
 
@@ -37,6 +47,12 @@ public class Workout extends ActionBarActivity {
         }
 
         return super.onOptionsItemSelected(item);
+    }
+
+    @Override
+    protected void onPause(){
+        super.onPause();
+        finish();
     }
 
     public void toSummary(View v){

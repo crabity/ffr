@@ -22,6 +22,7 @@ public class DataAPI {
     private ArrayList<Integer> moves;
 
     private static Integer MOVE_COUNT = 24;
+    private int current_move_idx;
 
     public DataAPI(Context c) {
         dbh = DatabaseHandler.getInstance(c);
@@ -29,6 +30,8 @@ public class DataAPI {
 
         bodyparts = new ArrayList<Integer>();
         moves = new ArrayList<Integer>();
+
+        current_move_idx = 1;
     }
 
     public static DataAPI getInstance(Context c){
@@ -36,6 +39,22 @@ public class DataAPI {
             i_dataapi = new DataAPI(c.getApplicationContext());
         }
         return i_dataapi;
+    }
+
+    public int getMoveIDX(){
+        return current_move_idx;
+    }
+
+    public void incrMoveIDX(){
+        current_move_idx++;
+    }
+
+    public SQLiteDatabase getDB(){
+        return db;
+    }
+
+    public int getMoveID(){
+        return moves.get(current_move_idx);
     }
 
     /*

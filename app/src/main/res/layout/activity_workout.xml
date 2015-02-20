@@ -19,11 +19,11 @@
         android:layout_alignParentRight="true"
         android:layout_alignParentEnd="true" />
 
-    <TextView
+    <EditText
         android:text="@string/title_workout"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:id="@+id/textView5"
+        android:id="@+id/workout_name"
         android:layout_below="@+id/textView4"
         android:layout_alignParentLeft="true"
         android:layout_alignParentStart="true"
@@ -40,7 +40,7 @@
         android:text="@string/workout_desc"
         android:id="@+id/textView6"
         android:textSize="15dp"
-        android:layout_below="@+id/textView5"
+        android:layout_below="@+id/workout_name"
         android:layout_alignParentLeft="true"
         android:layout_alignParentStart="true"
         android:layout_alignParentRight="true"
@@ -129,5 +129,14 @@
         android:layout_alignBottom="@+id/editText2"
         android:layout_alignLeft="@+id/button6"
         android:layout_alignStart="@+id/button6" />
+
+    <Button
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/workout_next"
+        android:id="@+id/button9"
+        android:layout_marginTop="44dp"
+        android:layout_below="@+id/editText2"
+        android:layout_centerHorizontal="true" />
 
 </RelativeLayout>
