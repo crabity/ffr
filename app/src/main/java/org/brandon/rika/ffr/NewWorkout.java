@@ -71,6 +71,7 @@ public class NewWorkout extends ActionBarActivity {
 
     public void startWorkout(View v){
         Intent intent = new Intent(this, Workout.class);
+        api.newWorkout();
         startActivity(intent);
     }
 

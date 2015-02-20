@@ -21,17 +21,14 @@ public class DataAPI {
     private ArrayList<Integer> bodyparts;
     private ArrayList<Integer> moves;
 
-    private static Integer MOVE_COUNT = 24;
+    static Integer MOVE_COUNT = 5;
     private int current_move_idx;
 
     public DataAPI(Context c) {
         dbh = DatabaseHandler.getInstance(c);
         db = dbh.getWritableDatabase();
 
-        bodyparts = new ArrayList<Integer>();
-        moves = new ArrayList<Integer>();
-
-        current_move_idx = 1;
+        newWorkout();
     }
 
     public static DataAPI getInstance(Context c){
@@ -39,6 +36,13 @@ public class DataAPI {
             i_dataapi = new DataAPI(c.getApplicationContext());
         }
         return i_dataapi;
+    }
+
+    public void newWorkout(){
+        bodyparts = new ArrayList<Integer>();
+        moves = new ArrayList<Integer>();
+
+        current_move_idx = 1;
     }
 
     public int getMoveIDX(){
@@ -54,7 +58,11 @@ public class DataAPI {
     }
 
     public int getMoveID(){
-        return moves.get(current_move_idx);
+        return moves.get(current_move_idx - 1);
+    }
+
+    public boolean isLastMove(){
+        return current_move_idx == MOVE_COUNT;
     }
 
     /*

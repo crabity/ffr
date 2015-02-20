@@ -8,7 +8,7 @@
 
     <TextView android:text="@string/workout_count" android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:id="@+id/textView4" />
+        android:id="@+id/workout_id" />
 
     <TextView
         android:text="@string/workout_time"
@@ -19,12 +19,12 @@
         android:layout_alignParentRight="true"
         android:layout_alignParentEnd="true" />
 
-    <EditText
+    <TextView
         android:text="@string/title_workout"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:id="@+id/workout_name"
-        android:layout_below="@+id/textView4"
+        android:layout_below="@+id/workout_id"
         android:layout_alignParentLeft="true"
         android:layout_alignParentStart="true"
         android:layout_alignParentRight="true"
@@ -38,7 +38,7 @@
         android:layout_width="wrap_content"
         android:layout_height="100dp"
         android:text="@string/workout_desc"
-        android:id="@+id/textView6"
+        android:id="@+id/workout_desc"
         android:textSize="15dp"
         android:layout_below="@+id/workout_name"
         android:layout_alignParentLeft="true"
@@ -54,7 +54,7 @@
         android:id="@+id/textView7"
         android:layout_marginTop="32dp"
         android:textSize="20dp"
-        android:layout_below="@+id/textView6"
+        android:layout_below="@+id/workout_desc"
         android:layout_alignLeft="@+id/button5"
         android:layout_alignStart="@+id/button5" />
 
@@ -64,18 +64,17 @@
         android:layout_height="wrap_content"
         android:text="@string/workout_dec_label"
         android:id="@+id/button5"
-        android:layout_alignBottom="@+id/editText"
-        android:layout_toLeftOf="@+id/editText"
-        android:layout_toStartOf="@+id/editText" />
+        android:layout_alignBottom="@+id/workout_rep"
+        android:layout_toLeftOf="@+id/workout_rep"
+        android:layout_toStartOf="@+id/workout_rep" />
 
     <EditText
         android:layout_width="50dp"
         android:layout_height="wrap_content"
-        android:id="@+id/editText"
+        android:id="@+id/workout_rep"
         android:text="25"
         android:numeric="integer"
         android:textAlignment="center"
-        android:onClick="toSummary"
         android:layout_below="@+id/textView7"
         android:layout_centerHorizontal="true" />
 
@@ -85,9 +84,9 @@
         android:layout_height="wrap_content"
         android:text="@string/workout_inc_label"
         android:id="@+id/button6"
-        android:layout_alignBottom="@+id/editText"
-        android:layout_toRightOf="@+id/editText"
-        android:layout_toEndOf="@+id/editText" />
+        android:layout_alignBottom="@+id/workout_rep"
+        android:layout_toRightOf="@+id/workout_rep"
+        android:layout_toEndOf="@+id/workout_rep" />
 
     <TextView
         android:layout_width="wrap_content"
@@ -97,13 +96,13 @@
         android:id="@+id/textView8"
         android:layout_marginTop="22dp"
         android:textSize="20dp"
-        android:layout_below="@+id/editText"
+        android:layout_below="@+id/workout_rep"
         android:layout_centerHorizontal="true" />
 
     <EditText
         android:layout_width="50dp"
         android:layout_height="wrap_content"
-        android:id="@+id/editText2"
+        android:id="@+id/workout_weight"
         android:text="25"
         android:numeric="integer"
         android:textAlignment="center"
@@ -116,9 +115,9 @@
         android:layout_height="wrap_content"
         android:text="@string/workout_dec_label"
         android:id="@+id/button7"
-        android:layout_alignBottom="@+id/editText2"
-        android:layout_toLeftOf="@+id/editText2"
-        android:layout_toStartOf="@+id/editText2" />
+        android:layout_alignBottom="@+id/workout_weight"
+        android:layout_toLeftOf="@+id/workout_weight"
+        android:layout_toStartOf="@+id/workout_weight" />
 
     <Button
         style="?android:attr/buttonStyleSmall"
@@ -126,7 +125,7 @@
         android:layout_height="wrap_content"
         android:text="@string/workout_inc_label"
         android:id="@+id/button8"
-        android:layout_alignBottom="@+id/editText2"
+        android:layout_alignBottom="@+id/workout_weight"
         android:layout_alignLeft="@+id/button6"
         android:layout_alignStart="@+id/button6" />
 
@@ -134,9 +133,10 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="@string/workout_next"
+        android:onClick="toNextPage"
         android:id="@+id/button9"
         android:layout_marginTop="44dp"
-        android:layout_below="@+id/editText2"
+        android:layout_below="@+id/workout_weight"
         android:layout_centerHorizontal="true" />
 
 </RelativeLayout>

@@ -7,6 +7,7 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.EditText;
+import android.widget.TextView;
 
 
 public class Workout extends ActionBarActivity {
@@ -22,8 +23,20 @@ public class Workout extends ActionBarActivity {
         api = DataAPI.getInstance(this);
         i_move = new Move(api.getDB(), api.getMoveID(), 0, api.getMoveIDX());
 
-        EditText workout_name = (EditText) findViewById(R.id.workout_name);
+        TextView workout_id = (TextView) findViewById(R.id.workout_id);
+        workout_id.setText("# " + api.getMoveIDX() + " of " + api.MOVE_COUNT);
+
+        TextView workout_name = (TextView) findViewById(R.id.workout_name);
         workout_name.setText(i_move.name);
+
+        TextView workout_desc = (TextView) findViewById(R.id.workout_desc);
+        workout_desc.setText(i_move.description);
+
+        EditText workout_rep = (EditText) findViewById(R.id.workout_rep);
+        workout_rep.setText(i_move.reps+"");
+
+        EditText workout_weight = (EditText) findViewById(R.id.workout_weight);
+        workout_rep.setText(i_move.weight+"");
     }
 
 
@@ -55,8 +68,15 @@ public class Workout extends ActionBarActivity {
         finish();
     }
 
-    public void toSummary(View v){
-        Intent intent = new Intent(this, Summary.class);
+    public void toNextPage(View v){
+        Intent intent = null;
+        if(api.isLastMove()) intent = new Intent(this, Summary.class);
+        else {
+            api.incrMoveIDX();
+            intent = new Intent(this, Workout.class);
+        }
+
         startActivity(intent);
+
     }
 }
