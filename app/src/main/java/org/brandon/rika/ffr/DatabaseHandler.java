@@ -347,7 +347,7 @@ public class DatabaseHandler extends SQLiteOpenHelper {
     }
 
     public static Integer getLastRep(SQLiteDatabase db, Integer mID) {
-        Cursor cursor = db.rawQuery("SELECT " + MH_REPS + " FROM " + TABLE_MOVE_HISTORY + " WHERE " + MOVES_ID + " = " + mID + " ORDER BY " + MH_WORKOUT_ID + " DESC", null);
+        Cursor cursor = db.rawQuery("SELECT " + MH_REPS + ", " + MH_WORKOUT_ID + " FROM " + TABLE_MOVE_HISTORY + " WHERE " + MOVES_ID + " = " + mID + " ORDER BY " + MH_WORKOUT_ID + " DESC", null);
         if (cursor.moveToFirst()) {
             return cursor.getInt(0);
         } else return 10;
