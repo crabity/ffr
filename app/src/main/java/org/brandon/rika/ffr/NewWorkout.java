@@ -25,15 +25,15 @@ public class NewWorkout extends ActionBarActivity {
 
         api = DataAPI.getInstance(this);
 
-        ArrayList<String> array_body = api.getBodyParts(this);
+        ArrayList<String> array_body = api.getBodyParts();
         String[] string_body = array_body.toArray(new String[array_body.size()]);
         ListAdapter list_bodypart = new ArrayAdapter<String>(this, android.R.layout.simple_list_item_1, string_body);
         ListView v_body = (ListView) findViewById(R.id.new_list_bodypart);
         v_body.setAdapter(list_bodypart);
 
-        api.getMoves(this);
+        api.getMoves();
 
-        ArrayList<String> array_equip = api.getEquipment(this);
+        ArrayList<String> array_equip = api.getEquipment();
         String[] string_equip = array_equip.toArray(new String[array_equip.size()]);
         ListAdapter list_equip = new ArrayAdapter<String>(this, android.R.layout.simple_list_item_1, string_equip);
         ListView v_equip = (ListView) findViewById(R.id.new_list_equipment);

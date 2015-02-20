@@ -346,6 +346,10 @@ public class DatabaseHandler extends SQLiteOpenHelper {
         } else return "Error";
     }
 
+    public static Cursor getMove(SQLiteDatabase db, Integer mID) {
+        return db.rawQuery("SELECT * FROM " + DatabaseHandler.TABLE_MOVES + " WHERE " + DatabaseHandler.MOVES_ID + " = " + mID, null);
+    }
+
     public Integer getRandomMoveID(SQLiteDatabase db, Integer partNum) {
         ArrayList<Integer> list = new ArrayList<Integer>(500);
         Cursor cursor = db.rawQuery("SELECT * FROM " + TABLE_MOVES + " WHERE " + MOVES_BODY_PART_ID + " = " + partNum, null);
@@ -369,5 +373,12 @@ public class DatabaseHandler extends SQLiteOpenHelper {
         if (cursor.moveToFirst()) {
             return cursor.getString(1);
         } else return "Error";
+    }
+
+    public static Integer getWeightNum(SQLiteDatabase db, Integer wID) {
+        Cursor cursor = db.rawQuery("SELECT * FROM " + DatabaseHandler.TABLE_WEIGHTS + " WHERE " + DatabaseHandler.WEIGHTS_ID + "=" + wID, null);
+        if (cursor.moveToFirst()) {
+            return cursor.getInt(1);
+        } else return 0;
     }
 }

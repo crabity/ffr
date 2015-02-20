@@ -15,19 +15,42 @@ public class Move {
     public Integer weight = 0;
     public Integer weightID = 0;
     public Integer workoutID = 0;
+
     public String description = "";
     public String name = "";
 
-    public Move(SQLiteDatabase db, Context c, Integer moveID, Integer wID, Integer pos) {
+    private SQLiteDatabase database;
+
+    public Move(SQLiteDatabase db, Integer mID, Integer wID, Integer pos) {
+
+        moveID = mID;
+        database = db;
         workoutID = wID;
         position = pos;
-        Cursor cursor = db.rawQuery("SELECT * FROM " + DatabaseHandler.TABLE_MOVES + " WHERE " + DatabaseHandler.MOVES_ID + " = " + moveID, null);
-        moveID = cursor.getInt(0);
+        Cursor cursor = DatabaseHandler.getMove(db, mID);
         description = cursor.getString(2);
         name = cursor.getString(1);
         weightID = cursor.getInt(4);
-        cursor = db.rawQuery("SELECT * FROM " + DatabaseHandler.TABLE_WEIGHTS + " WHERE " + DatabaseHandler.WEIGHTS_ID + "=" + weightID, null);
-        weight = cursor.getInt(1);
+        weight = getWeightNum();
         cursor.close();
+    }
+
+    private Integer getWeightNum() {
+        return DatabaseHandler.getWeightNum(database, weightID);
+    }
+
+    public void setWeightDown() {
+        if (weightID > 1) {
+            weightID--;
+            weight = getWeightNum();
+        }
+    }
+    public void setWeightUp() {
+        weightID++;
+        weight = getWeightNum();
+        if (weight == 0) {
+            weightID--;
+            weight = getWeightNum();
+        }
     }
 }

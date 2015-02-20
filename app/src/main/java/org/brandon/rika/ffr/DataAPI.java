@@ -41,7 +41,7 @@ public class DataAPI {
     /*
     Retrieve list of bodyparts to exercise
      */
-    ArrayList<String> getBodyParts(Context context) {
+    ArrayList<String> getBodyParts() {
         ArrayList<String> list = new ArrayList<String>();
         bodyparts=new ArrayList<Integer>();
         int bpNum1 = dbh.getBodyPart(db);
@@ -55,7 +55,7 @@ public class DataAPI {
         return list;
     }
 
-    void getMoves(Context c) {
+    void getMoves() {
         Random random = new Random();
         moves = new ArrayList<Integer>();
         for(int i = 0; i < MOVE_COUNT; i++) {
@@ -75,7 +75,7 @@ public class DataAPI {
     /*
     Retrieve list of equipment needed
      */
-    ArrayList<String> getEquipment(Context context) {
+    ArrayList<String> getEquipment() {
         return dbh.getEquipmentList(db, moves);
     }
 }
