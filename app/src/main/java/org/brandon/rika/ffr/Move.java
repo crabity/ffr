@@ -28,10 +28,12 @@ public class Move {
         workoutID = wID;
         position = pos;
         Cursor cursor = DatabaseHandler.getMove(db, mID);
-        description = cursor.getString(2);
-        name = cursor.getString(1);
-        weightID = cursor.getInt(4);
-        weight = getWeightNum();
+        if (cursor.moveToFirst()) {
+            description = cursor.getString(2);
+            name = cursor.getString(1);
+            weightID = cursor.getInt(4);
+            weight = getWeightNum();
+        }
         cursor.close();
         reps = DatabaseHandler.getLastRep(db, mID);
     }

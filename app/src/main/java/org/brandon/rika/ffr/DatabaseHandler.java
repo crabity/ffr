@@ -24,7 +24,7 @@ public class DatabaseHandler extends SQLiteOpenHelper {
 
     // All Static variables
     // Database Version
-    private static final int DATABASE_VERSION = 8;
+    private static final int DATABASE_VERSION = 9;
 
     // Database Name
     static final String DATABASE_NAME = "FitFitRevolution";
@@ -142,7 +142,7 @@ public class DatabaseHandler extends SQLiteOpenHelper {
         // Create Weights Table
         db.execSQL("CREATE TABLE IF NOT EXISTS " + TABLE_WEIGHTS + "("
                 + WEIGHTS_ID + " INTEGER PRIMARY KEY,"
-                + WEIGHTS_NUM + " INTEGER)");
+                + WEIGHTS_NUM + " REAL)");
 
         FillBodyPartsTable(db);
         FillEquipmentTable(db);
@@ -278,7 +278,7 @@ public class DatabaseHandler extends SQLiteOpenHelper {
             br = new BufferedReader(new InputStreamReader(context.getResources().openRawResource(R.raw.weights)));
             while ((line = br.readLine()) != null) {
                 ContentValues values = new ContentValues();
-                values.put(WEIGHTS_NUM, Integer.parseInt(line));
+                values.put(WEIGHTS_NUM, Float.parseFloat(line));
                 db.insert(TABLE_WEIGHTS, null, values);
             }
         } catch (IOException e) {
