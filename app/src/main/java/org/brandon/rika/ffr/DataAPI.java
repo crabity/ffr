@@ -38,33 +38,6 @@ public class DataAPI {
         return i_dataapi;
     }
 
-    public void newWorkout(){
-        current_move_idx = 1;
-    }
-
-    public int getMoveIDX(){
-        return current_move_idx;
-    }
-
-    public void incrMoveIDX(){
-        current_move_idx++;
-    }
-
-    public SQLiteDatabase getDB(){
-        return db;
-    }
-
-    public int getMoveID(){
-        return moves.get(current_move_idx - 1);
-    }
-
-    public boolean isLastMove(){
-        return current_move_idx == MOVE_COUNT;
-    }
-
-    /*
-    Retrieve list of bodyparts to exercise
-     */
     ArrayList<String> getBodyParts() {
         ArrayList<String> list = new ArrayList<String>();
         bodyparts=new ArrayList<Integer>();
@@ -79,6 +52,14 @@ public class DataAPI {
         return list;
     }
 
+    public SQLiteDatabase getDB(){
+        return db;
+    }
+
+    ArrayList<String> getEquipment() {
+        return dbh.getEquipmentList(db, moves);
+    }
+
     void getMoves() {
         Random random = new Random();
         moves = new ArrayList<Integer>();
@@ -88,18 +69,31 @@ public class DataAPI {
         }
     }
 
-    ArrayList<String> getMoveList(){
+    public int getMoveID(){
+        return moves.get(current_move_idx - 1);
+    }
+
+    public int getMoveIDX(){
+        return current_move_idx;
+    }
+
+    ArrayList<String> getMoveList() {
         ArrayList<String> move_names = new ArrayList<>();
-        for(int i=0; i<moves.size(); i++){
+        for(int i=0; i < moves.size(); i++){
             move_names.add(dbh.getMoveName(db, moves.get(i)));
         }
         return move_names;
     }
 
-    /*
-    Retrieve list of equipment needed
-     */
-    ArrayList<String> getEquipment() {
-        return dbh.getEquipmentList(db, moves);
+    public void incrMoveIDX(){
+        current_move_idx++;
+    }
+
+    public boolean isLastMove(){
+        return current_move_idx == MOVE_COUNT;
+    }
+
+    public void newWorkout(){
+        current_move_idx = 1;
     }
 }

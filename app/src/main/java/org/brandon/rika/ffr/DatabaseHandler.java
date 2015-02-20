@@ -364,7 +364,7 @@ public class DatabaseHandler extends SQLiteOpenHelper {
         } else return "Error";
     }
 
-    public static Integer getNextWorkout(SQLiteDatabase db) {
+    public static Integer getNextWorkoutID(SQLiteDatabase db) {
         Cursor cursor = db.rawQuery("SELECT * FROM " + TABLE_WORKOUT + " ORDER BY " + WORKOUT_ID + " DESC", null);
         if (cursor.moveToFirst()) {
             return cursor.getInt(0) + 1;
@@ -394,5 +394,10 @@ public class DatabaseHandler extends SQLiteOpenHelper {
         if (cursor.moveToFirst()) {
             return cursor.getInt(1);
         } else return 0;
+    }
+
+    public static void insertWorkoutMove(SQLiteDatabase db, Integer mID, Integer wID, Integer reps, Integer weightID, Integer pos) {
+        db.rawQuery("INSERT INTO " + TABLE_MOVE_HISTORY + " (" + MH_MOVE_ID + ", " + MH_WORKOUT_ID + ", " + MH_WEIGHT + ", " + MH_REPS + ", "+ MH_PLACEMENT
+            + " VALUES(" + mID + ", " + wID + ", " + weightID + ", "+ reps + ", " + pos + ")", null);
     }
 }

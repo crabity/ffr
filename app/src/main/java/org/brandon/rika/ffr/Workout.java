@@ -14,6 +14,7 @@ public class Workout extends ActionBarActivity {
 
     DataAPI api;
     Move i_move;
+    Integer workoutID = 0;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -23,7 +24,7 @@ public class Workout extends ActionBarActivity {
         api = DataAPI.getInstance(this);
         i_move = new Move(api.getDB(), api.getMoveID(), 0, api.getMoveIDX());
 
-        TextView workout_id = (TextView) findViewById(R.id.workout_id);
+        TextView workout_id = (TextView) findViewById(R.id.move_count);
         workout_id.setText("# " + api.getMoveIDX() + " of " + api.MOVE_COUNT);
 
         TextView workout_name = (TextView) findViewById(R.id.workout_name);
@@ -36,7 +37,9 @@ public class Workout extends ActionBarActivity {
         workout_rep.setText(i_move.reps + "");
 
         EditText workout_weight = (EditText) findViewById(R.id.workout_weight);
-        workout_rep.setText(i_move.weight + "");
+        workout_weight.setText(i_move.weight + "");
+
+        workoutID = DatabaseHandler.getNextWorkoutID(api.getDB());
     }
 
 
@@ -73,6 +76,7 @@ public class Workout extends ActionBarActivity {
         if(api.isLastMove()) intent = new Intent(this, Summary.class);
         else {
             api.incrMoveIDX();
+            i_move.submit();
             intent = new Intent(this, Workout.class);
         }
 

@@ -65,4 +65,8 @@ public class Move {
             weight = getWeightNum();
         }
     }
+
+    public void submit() {
+        DatabaseHandler.insertWorkoutMove(database, moveID, workoutID, reps, weightID, position);
+    }
 }
