@@ -1,6 +1,7 @@
 package org.brandon.rika.ffr;
 
 import android.content.Intent;
+import android.database.sqlite.SQLiteDatabase;
 import android.support.v7.app.ActionBarActivity;
 import android.os.Bundle;
 import android.view.Menu;
@@ -14,7 +15,6 @@ public class Workout extends ActionBarActivity {
 
     DataAPI api;
     Move i_move;
-    Integer workoutID = 0;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -22,7 +22,7 @@ public class Workout extends ActionBarActivity {
         setContentView(R.layout.activity_workout);
 
         api = DataAPI.getInstance(this);
-        i_move = new Move(api.getDB(), api.getMoveID(), 0, api.getMoveIDX());
+        i_move = new Move(api.getDB(), api.getMoveID(), api.getWorkoutID(), api.getMoveIDX());
 
         TextView workout_id = (TextView) findViewById(R.id.move_count);
         workout_id.setText("# " + api.getMoveIDX() + " of " + api.MOVE_COUNT);
@@ -38,8 +38,6 @@ public class Workout extends ActionBarActivity {
 
         EditText workout_weight = (EditText) findViewById(R.id.workout_weight);
         workout_weight.setText(i_move.weight + "");
-
-        workoutID = DatabaseHandler.getNextWorkoutID(api.getDB());
     }
 
 
@@ -73,10 +71,12 @@ public class Workout extends ActionBarActivity {
 
     public void toNextPage(View v){
         Intent intent = null;
-        if(api.isLastMove()) intent = new Intent(this, Summary.class);
-        else {
+        i_move.submit();
+        if(api.isLastMove()) {
+            api.submit();
+            intent = new Intent(this, Summary.class);
+        } else {
             api.incrMoveIDX();
-            i_move.submit();
             intent = new Intent(this, Workout.class);
         }
 

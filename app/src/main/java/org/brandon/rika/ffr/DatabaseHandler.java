@@ -347,10 +347,10 @@ public class DatabaseHandler extends SQLiteOpenHelper {
     }
 
     public static Integer getLastRep(SQLiteDatabase db, Integer mID) {
-        Cursor cursor = db.rawQuery("SELECT " + MH_REPS + ", " + MH_WORKOUT_ID + " FROM " + TABLE_MOVE_HISTORY + " WHERE " + MOVES_ID + " = " + mID + " ORDER BY " + MH_WORKOUT_ID + " DESC", null);
+        Cursor cursor = db.rawQuery("SELECT * FROM " + TABLE_MOVE_HISTORY + " WHERE " + MH_MOVE_ID + " = " + mID + " ORDER BY " + MH_WORKOUT_ID + " DESC, " + MH_PLACEMENT + " DESC", null);
         if (cursor.moveToFirst()) {
-            return cursor.getInt(0);
-        } else return 10;
+            return cursor.getInt(3);
+        } else return 9;
     }
 
     public static Cursor getMove(SQLiteDatabase db, Integer mID) {
@@ -364,11 +364,13 @@ public class DatabaseHandler extends SQLiteOpenHelper {
         } else return "Error";
     }
 
-    public static Integer getNextWorkoutID(SQLiteDatabase db) {
+    public Integer getNextWorkoutID(SQLiteDatabase db) {
+        Integer value = 1;
         Cursor cursor = db.rawQuery("SELECT * FROM " + TABLE_WORKOUT + " ORDER BY " + WORKOUT_ID + " DESC", null);
         if (cursor.moveToFirst()) {
-            return cursor.getInt(0) + 1;
-        } else return 0;
+            value = cursor.getInt(0) + 1;
+        }
+        return value;
     }
 
     public Integer getRandomMoveID(SQLiteDatabase db, Integer partNum) {
@@ -396,8 +398,11 @@ public class DatabaseHandler extends SQLiteOpenHelper {
         } else return 0;
     }
 
+    public static void insertWorkout(SQLiteDatabase db, Integer wID, Integer score) {
+        db.execSQL("INSERT INTO " + TABLE_WORKOUT + "(" + WORKOUT_DATETIME + ", " + WORKOUT_SCORE + ") VALUES(DATETIME('now'), " + score + ")");
+    }
+
     public static void insertWorkoutMove(SQLiteDatabase db, Integer mID, Integer wID, Integer reps, Integer weightID, Integer pos) {
-        db.rawQuery("INSERT INTO " + TABLE_MOVE_HISTORY + " (" + MH_MOVE_ID + ", " + MH_WORKOUT_ID + ", " + MH_WEIGHT + ", " + MH_REPS + ", "+ MH_PLACEMENT
-            + ") VALUES(" + mID + ", " + wID + ", " + weightID + ", "+ reps + ", " + pos + ")", null);
+        db.execSQL("INSERT INTO " + TABLE_MOVE_HISTORY + " VALUES(" + mID + ", " + wID + ", " + weightID + ", "+ reps + ", " + pos + ")");
     }
 }

@@ -23,6 +23,7 @@ public class DataAPI {
 
     static Integer MOVE_COUNT = 5;
     private int current_move_idx;
+    private int workoutID = 0;
 
     public DataAPI(Context c) {
         dbh = DatabaseHandler.getInstance(c);
@@ -85,6 +86,10 @@ public class DataAPI {
         return move_names;
     }
 
+    public int getWorkoutID() {
+        return workoutID;
+    }
+
     public void incrMoveIDX(){
         current_move_idx++;
     }
@@ -95,5 +100,10 @@ public class DataAPI {
 
     public void newWorkout(){
         current_move_idx = 1;
+        workoutID = dbh.getNextWorkoutID(db);
+    }
+
+    public void submit() {
+        DatabaseHandler.insertWorkout(db, workoutID, 0);
     }
 }
