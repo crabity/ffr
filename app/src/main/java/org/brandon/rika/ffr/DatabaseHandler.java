@@ -24,7 +24,7 @@ public class DatabaseHandler extends SQLiteOpenHelper {
 
     // All Static variables
     // Database Version
-    private static final int DATABASE_VERSION = 9;
+    private static final int DATABASE_VERSION = 10;
 
     // Database Name
     static final String DATABASE_NAME = "FitFitRevolution";
@@ -322,7 +322,7 @@ public class DatabaseHandler extends SQLiteOpenHelper {
         ArrayList<String> names = new ArrayList<String>();
         Cursor cursor = null;
         for (int i: moveList) {
-            cursor = db.rawQuery("SELECT " + ME_EQUIP_ID + " FROM " + TABLE_MOVE_EQUIP + " WHERE " + ME_MOVE_ID + " = " + moveList.get(i), null);
+            cursor = db.rawQuery("SELECT " + ME_EQUIP_ID + " FROM " + TABLE_MOVE_EQUIP + " WHERE " + ME_MOVE_ID + " = " + i, null);
             if (cursor.moveToFirst()) {
                 boolean testForMatch = false;
                 for (String test: names) {
@@ -350,7 +350,7 @@ public class DatabaseHandler extends SQLiteOpenHelper {
         Cursor cursor = db.rawQuery("SELECT * FROM " + TABLE_MOVE_HISTORY + " WHERE " + MH_MOVE_ID + " = " + mID + " ORDER BY " + MH_WORKOUT_ID + " DESC, " + MH_PLACEMENT + " DESC", null);
         if (cursor.moveToFirst()) {
             return cursor.getInt(3);
-        } else return 9;
+        } else return 10;
     }
 
     public static Cursor getMove(SQLiteDatabase db, Integer mID) {
