@@ -24,7 +24,7 @@ public class DatabaseHandler extends SQLiteOpenHelper {
 
     // All Static variables
     // Database Version
-    private static final int DATABASE_VERSION = 10;
+    private static final int DATABASE_VERSION = 11;
 
     // Database Name
     static final String DATABASE_NAME = "FitFitRevolution";
@@ -156,9 +156,9 @@ public class DatabaseHandler extends SQLiteOpenHelper {
     public void onUpgrade(SQLiteDatabase db, int oldVersion, int newVersion) {
         // Drop older table if existed
         db.execSQL("DROP TABLE IF EXISTS " + TABLE_MOVES);
-        //db.execSQL("DROP TABLE IF EXISTS "+TABLE_MOVE_HISTORY);
+        db.execSQL("DROP TABLE IF EXISTS "+TABLE_MOVE_HISTORY);
         db.execSQL("DROP TABLE IF EXISTS " + TABLE_BODY_PART);
-        //db.execSQL("DROP TABLE IF EXISTS "+TABLE_WORKOUT);
+        db.execSQL("DROP TABLE IF EXISTS "+TABLE_WORKOUT);
         db.execSQL("DROP TABLE IF EXISTS " + TABLE_EQUIPMENT);
         db.execSQL("DROP TABLE IF EXISTS " + TABLE_MOVE_EQUIP);
         // Create tables again

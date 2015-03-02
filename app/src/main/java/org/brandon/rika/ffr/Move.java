@@ -31,7 +31,7 @@ public class Move {
         if (cursor.moveToFirst()) {
             description = cursor.getString(2);
             name = cursor.getString(1);
-            weightID = cursor.getInt(4);
+            weightID = cursor.getInt(5);
             weight = getWeightNum();
         }
         cursor.close();
